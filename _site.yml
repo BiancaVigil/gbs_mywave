@@ -1,1 +1,5 @@
 output_dir: "."
+output:
+  html_document:
+    highlight: textmate
+    theme: journal

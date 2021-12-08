@@ -17,7 +17,7 @@
 <script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/journal.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
@@ -31,7 +31,7 @@
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
-<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 
 <style type="text/css">
@@ -171,25 +171,23 @@ pre code {
 </div>
 
 
-<div id="gbs" class="section level2">
-<h2>GBS</h2>
-<strong>APLICACIONES</strong>
+<div id="aplicaciones" class="section level3">
+<h3><strong>APLICACIONES</strong></h3>
 <div>
 <p style="text-align:center;">
-<img src="Applications-of-Genotyping-by-Sequencing-integrating-broad-areas-of-genetics-and.png" width="1000px">
+<img src="Applications-of-Genotyping-by-Sequencing-integrating-broad-areas-of-genetics-and.png" width="600px">
 </p>
 </div>
 </div>
 <div id="pipeline-gbs-procesing" class="section level2">
-<h2>PIPELINE GBS-PROCESING</h2>
+<h2><strong>PIPELINE GBS-PROCESING</strong></h2>
 <div>
 <p style="text-align:center;">
 <img src="pipeline_GBS.png" width="1000px">
 </p>
 </div>
-</div>
-<div id="stacks" class="section level2">
-<h2><a href="https://catchenlab.life.illinois.edu/stacks/">STACKS</a></h2>
+<div id="stacks" class="section level3">
+<h3><a href="https://catchenlab.life.illinois.edu/stacks/"><strong>STACKS</strong></a></h3>
 <p><a href="https://catchenlab.life.illinois.edu/stacks/">Descargar</a></p>
 <p><a href="https://catchenlab.life.illinois.edu/stacks/manual/#install">Instalar-manual</a></p>
 <div>
@@ -198,8 +196,9 @@ pre code {
 </p>
 </div>
 </div>
+</div>
 <div id="demultiplexación---filtrado---stacks" class="section level2">
-<h2>DEMULTIPLEXACIÓN - FILTRADO - STACKS</h2>
+<h2><strong>DEMULTIPLEXACIÓN - FILTRADO - STACKS</strong></h2>
 <p><a href="https://catchenlab.life.illinois.edu/stacks/manual-v1/"><strong>process_radtags</strong></a></p>
 1.RawData
 <div>
@@ -221,15 +220,19 @@ pre code {
 </div>
 </div>
 <div id="alineamiento-a-genoma-de-referencia" class="section level2">
-<h2>ALINEAMIENTO A GENOMA DE REFERENCIA</h2>
-<p>1.BWA - BORROWS WHEELER ALIGNER</p>
+<h2><strong>ALINEAMIENTO A GENOMA DE REFERENCIA</strong></h2>
+<p><strong>1.INSTALACIÓN DE PROGRAMAS</strong></p>
+<p>BWA - BORROWS WHEELER ALIGNER</p>
 <pre><code>sudo apt-get update
 sudo apt-get install bwa</code></pre>
-<p>2.INDEXADO DEL GENOMA DE REFERENCIA</p>
+<p>SAMTOOLS</p>
+<pre><code>sudo apt-get update
+sudo apt-get install samtools</code></pre>
+<p><strong>2.INDEXADO DEL GENOMA DE REFERENCIA</strong></p>
 <pre><code>#!/bin/bash
 src=&quot;/home/bvigil/GBS_SEMINARIO/genoma&quot;
 bwa index -p manihot-index -a bwtsw $src/GCF_001659605.2_M.esculenta_v8_genomic.fna</code></pre>
-<p>3.ALINEAMIENTO</p>
+<p><strong>3.ALINEAMIENTO</strong></p>
 <pre><code>#!/bin/bash
 src=&quot;/home/bvigil/GBS_SEMINARIO/&quot;
 bwa_db=&quot;/home/bvigil/GBS_SEMINARIO/genoma/manihot-index&quot;
@@ -248,7 +251,7 @@ do
         bwa mem -t 12 $bwa_db $src/data/${ME}.fastq.gz &gt; $src/alineamiento/${ME}.sam
 done
 </code></pre>
-<p>4.SAM –&gt; BAM</p>
+<p><strong>4.SAM –&gt; BAM</strong></p>
 <pre><code>#!/bin/bash
 src=&quot;/home/bvigil/GBS_SEMINARIO/&quot;
 
@@ -265,7 +268,7 @@ for ME in $files
 do
         samtools view -b -S $src/alineamiento/${ME}.sam -o $src/alineamiento/${ME}.bam
 done</code></pre>
-<p>5.SORT</p>
+<p><strong>5.SORT</strong></p>
 <pre><code>#!/bin/bash
 src=&quot;/home/bvigil/GBS_SEMINARIO/alineamiento/&quot;
 
@@ -282,23 +285,23 @@ for ME in $files
 do
         samtools sort $src/${ME}.bam -o $src/sort/${ME}.bam
 done</code></pre>
-</div>
-<div id="gstacks-stacks" class="section level2">
-<h2>GSTACKS-STACKS</h2>
+<div id="gstacks---stacks" class="section level3">
+<h3><strong>GSTACKS - STACKS</strong></h3>
 <pre><code>#!/bin/bash
 
 src=&quot;/home/bvigil/GBS_SEMINARIO&quot;
 gstacks -I $src/alineamiento/sort/ -M $src/scripts/popmap-yuca-piloto -O $src/stacks -t 24</code></pre>
 </div>
-<div id="populations---vcf" class="section level2">
-<h2>POPULATIONS - VCF</h2>
+<div id="populations---vcf" class="section level3">
+<h3><strong>POPULATIONS - VCF</strong></h3>
+<p><strong>SNP-CALLING</strong></p>
 <pre><code>#!/bin/bash
 
 src=&quot;/home/bvigil/GBS_SEMINARIO&quot;
 populations -P $src/stacks/ -M $src/scripts/popmap-yuca-piloto --vcf --plink -t 24</code></pre>
 </div>
-<div id="formato-vcf" class="section level2">
-<h2>FORMATO <a href="https://samtools.github.io/hts-specs/VCFv4.2.pdf">VCF</a></h2>
+<div id="formato-vcf" class="section level3">
+<h3><strong>FORMATO</strong> <a href="https://samtools.github.io/hts-specs/VCFv4.2.pdf">VCF</a></h3>
 <p>VCF es un formato de archivo de texto (lo más probable es que se almacene de forma comprimida). Contiene líneas de metainformación, una línea de encabezado y luego líneas de datos, cada una de las cuales contiene información sobre una posición en el genoma. El formato también tiene la capacidad de contener información de genotipo en muestras para cada posición.</p>
 <div>
 <p style="text-align:center;">
@@ -306,27 +309,110 @@ populations -P $src/stacks/ -M $src/scripts/popmap-yuca-piloto --vcf --plink -t 
 </p>
 </div>
 </div>
-<div id="programas---snp-calling" class="section level2">
-<h2>PROGRAMAS - SNP CALLING</h2>
-<ol style="list-style-type: decimal">
-<li>SAMTOOLS</li>
-</ol>
-<pre><code>sudo apt-get update
-sudo apt-get install samtools</code></pre>
-<ol start="2" style="list-style-type: decimal">
-<li>VCFTOOLS</li>
-</ol>
+<div id="programas--filtrado-de-snps" class="section level3">
+<h3><strong>PROGRAMAS -FILTRADO DE SNPs</strong></h3>
+<p><strong>1.VCFTOOLS</strong></p>
 <pre><code>sudo apt-get update
 sudo apt-get install vcftools</code></pre>
-<ol start="3" style="list-style-type: decimal">
-<li>BCFTOOLS</li>
-</ol>
+<p><strong>2.BCFTOOLS</strong></p>
 <pre><code>sudo apt-get update
 sudo apt-get install bcftools</code></pre>
 </div>
-<div id="descargar-archivo" class="section level2">
-<h2>DESCARGAR ARCHIVO</h2>
+</div>
+<div id="descargar-archivo---demo" class="section level2">
+<h2><strong>DESCARGAR ARCHIVO - DEMO</strong></h2>
 <p>Descargar <a href="https://drive.google.com/drive/folders/18xm4UcUeKhOCNCGLsWXVWW3jCQtKgwoV?usp=sharing">archivo VCF</a></p>
+<div>
+<p style="text-align:center;">
+<img src="vcf_yuca.png" width="1000px">
+</p>
+</div>
+</div>
+<div id="filtrado-a-nivel-de-loci-variante-snp" class="section level2">
+<h2><strong>FILTRADO A NIVEL DE LOCI-VARIANTE-SNP</strong></h2>
+<p>Solo se mantendran a variantes que se hayan genotipado con éxito en el 50% de los individuos de nuestra población.</p>
+<pre class="bash"><code>vcftools --vcf /home/bvigil/GBS_SEMINARIO/stacks/yuca.chr14.recode.vcf --max-missing 0.5 --recode --recode-INFO-all --out /home/bvigil/GBS_SEMINARIO/stacks/yuca.chr14.maxmissing0.5 </code></pre>
+<pre><code>## 
+## VCFtools - 0.1.16
+## (C) Adam Auton and Anthony Marcketta 2009
+## 
+## Parameters as interpreted:
+##  --vcf /home/bvigil/GBS_SEMINARIO/stacks/yuca.chr14.recode.vcf
+##  --recode-INFO-all
+##  --max-missing 0.5
+##  --out /home/bvigil/GBS_SEMINARIO/stacks/yuca.chr14.maxmissing0.5
+##  --recode
+## 
+## After filtering, kept 8 out of 8 Individuals
+## Outputting VCF file...
+## After filtering, kept 5749 out of a possible 8110 Sites
+## Run Time = 0.00 seconds</code></pre>
+</div>
+<div id="filtrado-por-individuos" class="section level2">
+<h2><strong>FILTRADO POR INDIVIDUOS</strong></h2>
+<p>Este paso es para eliminar a los individuos que no se secuenciaron bien, que presentan datos faltantes por loci. Esto se realiza evaluando los niveles individuales de datos faltantes.</p>
+<pre class="bash"><code>vcftools --vcf /home/bvigil/GBS_SEMINARIO/stacks/yuca.chr14.maxmissing0.5.recode.vcf --missing-indv</code></pre>
+<pre><code>## 
+## VCFtools - 0.1.16
+## (C) Adam Auton and Anthony Marcketta 2009
+## 
+## Parameters as interpreted:
+##  --vcf /home/bvigil/GBS_SEMINARIO/stacks/yuca.chr14.maxmissing0.5.recode.vcf
+##  --missing-indv
+## 
+## After filtering, kept 8 out of 8 Individuals
+## Outputting Individual Missingness
+## After filtering, kept 5749 out of a possible 5749 Sites
+## Run Time = 0.00 seconds</code></pre>
+<p>revisamos el out.imiss</p>
+<div>
+<p style="text-align:center;">
+<img src="imiss.png" width="500px">
+</p>
+</div>
+<p>Observamos la data faltante por individuo en un histograma</p>
+<pre><code>#!/bin/bash
+
+mawk &#39;!/IN/&#39; /home/bvigil/GBS_SEMINARIO/stacks/out.imiss | cut -f5 &gt; /home/bvigil/GBS_SEMINARIO/stacks/totalmissing
+gnuplot &lt;&lt; \EOF 
+set terminal dumb size 120, 30
+set autoscale 
+unset label
+set title &quot;Histogram of % missing data per individual&quot;
+set ylabel &quot;Number of Occurrences&quot;
+set xlabel &quot;% of missing data&quot;
+#set yr [0:100000]
+binwidth=0.01
+bin(x,width)=width*floor(x/width) + binwidth/2.0
+plot &#39;totalmissing&#39; using (bin($1,binwidth)):(1.0) smooth freq with boxes
+pause -1
+EOF</code></pre>
+<pre><code>./hist_miss.sh</code></pre>
+<div>
+<p style="text-align:center;">
+<img src="totalmissing.png" width="700px">
+</p>
+</div>
+</div>
+<div id="filtrado-por-frecuencia-de-alelo-menor---maf" class="section level2">
+<h2><strong>FILTRADO POR FRECUENCIA DE ALELO MENOR - MAF</strong></h2>
+<p>Este filtrado es importante y depende de los objetivos del estudio, el tipo y la cantidad de individuos de la población. Por lo general se hace un filtrado de maf 0.01, esto significa que se eliminaran aquellos loci cuyo alelo menor tenga una frecuencia menor al 1%.</p>
+<pre class="bash"><code>vcftools --vcf /home/bvigil/GBS_SEMINARIO/stacks/yuca.chr14.maxmissing0.5.recode.vcf --maf 0.01 --recode --recode-INFO-all --out /home/bvigil/GBS_SEMINARIO/stacks/yuca.chr14.maxmissing0.5.maf0.01</code></pre>
+<pre><code>## 
+## VCFtools - 0.1.16
+## (C) Adam Auton and Anthony Marcketta 2009
+## 
+## Parameters as interpreted:
+##  --vcf /home/bvigil/GBS_SEMINARIO/stacks/yuca.chr14.maxmissing0.5.recode.vcf
+##  --recode-INFO-all
+##  --maf 0.01
+##  --out /home/bvigil/GBS_SEMINARIO/stacks/yuca.chr14.maxmissing0.5.maf0.01
+##  --recode
+## 
+## After filtering, kept 8 out of 8 Individuals
+## Outputting VCF file...
+## After filtering, kept 5749 out of a possible 5749 Sites
+## Run Time = 0.00 seconds</code></pre>
 </div>
 
 

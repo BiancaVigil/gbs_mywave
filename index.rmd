@@ -3,19 +3,16 @@ title: "GBS"
 author: "bvigil"
 date: "7/12/2021"
 output: html_document
-  theme: leonids
 ---
 
-
-## GBS
-**APLICACIONES**
+### **APLICACIONES**
 <div>
 <p style = 'text-align:center;'>
-<img src="Applications-of-Genotyping-by-Sequencing-integrating-broad-areas-of-genetics-and.png" width="1000px">
+<img src="Applications-of-Genotyping-by-Sequencing-integrating-broad-areas-of-genetics-and.png" width="600px">
 </p>
 </div>
 
-## PIPELINE GBS-PROCESING
+## **PIPELINE GBS-PROCESING**
 <div>
 <p style = 'text-align:center;'>
 <img src="pipeline_GBS.png" width="1000px">
@@ -23,7 +20,7 @@ output: html_document
 </div>
 
 
-## [STACKS](https://catchenlab.life.illinois.edu/stacks/)
+### [**STACKS**](https://catchenlab.life.illinois.edu/stacks/)
 
 [Descargar](https://catchenlab.life.illinois.edu/stacks/)
 
@@ -35,7 +32,7 @@ output: html_document
 </p>
 </div>
 
-## DEMULTIPLEXACIÓN - FILTRADO - STACKS
+## **DEMULTIPLEXACIÓN - FILTRADO - STACKS**
 
 [**process_radtags**](https://catchenlab.life.illinois.edu/stacks/manual-v1/)
 
@@ -58,19 +55,27 @@ output: html_document
 </p>
 </div>
 
-## ALINEAMIENTO A GENOMA DE REFERENCIA
-1.BWA - BORROWS WHEELER ALIGNER
+## **ALINEAMIENTO A GENOMA DE REFERENCIA**
+
+**1.INSTALACIÓN DE PROGRAMAS**
+  
+  BWA - BORROWS WHEELER ALIGNER
 ```{}
 sudo apt-get update
 sudo apt-get install bwa
 ```
-2.INDEXADO DEL GENOMA DE REFERENCIA
+  SAMTOOLS
+```{}
+sudo apt-get update
+sudo apt-get install samtools
+```
+**2.INDEXADO DEL GENOMA DE REFERENCIA**
 ```{}
 #!/bin/bash
 src="/home/bvigil/GBS_SEMINARIO/genoma"
 bwa index -p manihot-index -a bwtsw $src/GCF_001659605.2_M.esculenta_v8_genomic.fna
 ```
-3.ALINEAMIENTO 
+**3.ALINEAMIENTO**
 ```{}
 #!/bin/bash
 src="/home/bvigil/GBS_SEMINARIO/"
@@ -91,7 +96,7 @@ do
 done
 
 ```
-4.SAM --> BAM
+**4.SAM --> BAM**
 ```{}
 #!/bin/bash
 src="/home/bvigil/GBS_SEMINARIO/"
@@ -110,7 +115,7 @@ do
         samtools view -b -S $src/alineamiento/${ME}.sam -o $src/alineamiento/${ME}.bam
 done
 ```
-5.SORT 
+**5.SORT** 
 ```{}
 #!/bin/bash
 src="/home/bvigil/GBS_SEMINARIO/alineamiento/"
@@ -130,7 +135,8 @@ do
 done
 ```
 
-## GSTACKS-STACKS
+### **GSTACKS - STACKS**
+
 ```{}
 #!/bin/bash
 
@@ -138,7 +144,8 @@ src="/home/bvigil/GBS_SEMINARIO"
 gstacks -I $src/alineamiento/sort/ -M $src/scripts/popmap-yuca-piloto -O $src/stacks -t 24
 ```
 
-## POPULATIONS - VCF
+### **POPULATIONS - VCF**
+**SNP-CALLING**
 ```{}
 #!/bin/bash
 
@@ -146,7 +153,7 @@ src="/home/bvigil/GBS_SEMINARIO"
 populations -P $src/stacks/ -M $src/scripts/popmap-yuca-piloto --vcf --plink -t 24
 ```
 
-## FORMATO [VCF](https://samtools.github.io/hts-specs/VCFv4.2.pdf)
+### **FORMATO** [VCF](https://samtools.github.io/hts-specs/VCFv4.2.pdf)
 
 VCF es un formato de archivo de texto (lo más probable es que se almacene de forma comprimida). Contiene líneas de metainformación, una línea de encabezado y luego líneas de datos, cada una de las cuales contiene información sobre una posición en el genoma. El formato también tiene la capacidad de contener información de genotipo en muestras para cada posición.
 
@@ -156,24 +163,89 @@ VCF es un formato de archivo de texto (lo más probable es que se almacene de fo
 </p>
 </div>
 
-## PROGRAMAS - SNP CALLING
-1. SAMTOOLS 
-```{}
-sudo apt-get update
-sudo apt-get install samtools
-```
-2. VCFTOOLS
+### **PROGRAMAS -FILTRADO DE SNPs**
+**1.VCFTOOLS**
 ```{}
 sudo apt-get update
 sudo apt-get install vcftools
 ```
-3. BCFTOOLS
+**2.BCFTOOLS**
 ```{}
 sudo apt-get update
 sudo apt-get install bcftools
 ```
 
-
-## DESCARGAR ARCHIVO
+## **DESCARGAR ARCHIVO - DEMO**
 
 Descargar [archivo VCF](https://drive.google.com/drive/folders/18xm4UcUeKhOCNCGLsWXVWW3jCQtKgwoV?usp=sharing)
+
+<div>
+<p style = 'text-align:center;'>
+<img src="vcf_yuca.png" width="1000px">
+</p>
+</div>
+
+## **FILTRADO A NIVEL DE LOCI-VARIANTE-SNP**
+
+Solo se mantendran a variantes que se hayan genotipado con éxito en el 50% de los individuos de nuestra población.
+
+```{bash}
+vcftools --vcf /home/bvigil/GBS_SEMINARIO/stacks/yuca.chr14.recode.vcf --max-missing 0.5 --recode --recode-INFO-all --out /home/bvigil/GBS_SEMINARIO/stacks/yuca.chr14.maxmissing0.5 
+```
+
+## **FILTRADO POR INDIVIDUOS**
+
+Este paso es para eliminar a los individuos que no se secuenciaron bien, que presentan datos faltantes por loci. Esto se realiza evaluando los niveles individuales de datos faltantes.
+
+```{bash}
+vcftools --vcf /home/bvigil/GBS_SEMINARIO/stacks/yuca.chr14.maxmissing0.5.recode.vcf --missing-indv
+```
+
+revisamos el out.imiss
+
+<div>
+<p style = 'text-align:center;'>
+<img src="imiss.png" width="500px">
+</p>
+</div>
+
+Observamos la data faltante por individuo en un histograma
+
+```{}
+#!/bin/bash
+
+mawk '!/IN/' /home/bvigil/GBS_SEMINARIO/stacks/out.imiss | cut -f5 > /home/bvigil/GBS_SEMINARIO/stacks/totalmissing
+gnuplot << \EOF 
+set terminal dumb size 120, 30
+set autoscale 
+unset label
+set title "Histogram of % missing data per individual"
+set ylabel "Number of Occurrences"
+set xlabel "% of missing data"
+#set yr [0:100000]
+binwidth=0.01
+bin(x,width)=width*floor(x/width) + binwidth/2.0
+plot 'totalmissing' using (bin($1,binwidth)):(1.0) smooth freq with boxes
+pause -1
+EOF
+```
+
+```{}
+./hist_miss.sh
+```
+
+<div>
+<p style = 'text-align:center;'>
+<img src="totalmissing.png" width="700px">
+</p>
+</div>
+
+## **FILTRADO POR FRECUENCIA DE ALELO MENOR - MAF**
+
+Este filtrado es importante y depende de los objetivos del estudio, el tipo y la cantidad de individuos de la población. Por lo general se hace un filtrado de maf 0.01, esto significa que se eliminaran aquellos loci cuyo alelo menor tenga una frecuencia menor al 1%.
+
+```{bash}
+vcftools --vcf /home/bvigil/GBS_SEMINARIO/stacks/yuca.chr14.maxmissing0.5.recode.vcf --maf 0.01 --recode --recode-INFO-all --out /home/bvigil/GBS_SEMINARIO/stacks/yuca.chr14.maxmissing0.5.maf0.01
+```
+
+
