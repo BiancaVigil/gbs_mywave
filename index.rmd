@@ -1,15 +1,12 @@
 ---
-title: "SEMINARIO GENOTYPING BY SEQUENCE - GBS"
-author: "Bianca Vigil"
-date: "4/11/2021"
-output:
-  slidy_presentation: default
-  beamer_presentation:
-    theme: Montpellier
-    colortheme: default
-    fonttheme: structurebold
-  ioslides_presentation: default
+title: "GBS"
+author: "bvigil"
+date: "7/12/2021"
+output: html_document
+  theme: yeti
 ---
+
+
 ## GBS
 **APLICACIONES**
 <div>
@@ -180,26 +177,3 @@ sudo apt-get install bcftools
 ## DESCARGAR ARCHIVO
 
 Descargar [archivo VCF](https://drive.google.com/drive/folders/18xm4UcUeKhOCNCGLsWXVWW3jCQtKgwoV?usp=sharing)
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
-## FILTRADOS
-
-
-```{r cars}
-summary(cars)
-```
-
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
-
-##
