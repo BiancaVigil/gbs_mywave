@@ -3,6 +3,7 @@ title: "GBS"
 author: "bvigil"
 date: "7/12/2021"
 output: html_document
+  theme: leonids
 ---
 
 

@@ -1,8 +1,1 @@
 output_dir: "."
-navbar:
-  title: "GBS"
-  left:
-  - text: "Home"
-   href: index.html
-  - text: "about me"
-   href: about.html
