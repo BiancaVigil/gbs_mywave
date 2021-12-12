@@ -435,6 +435,84 @@ EOF</code></pre>
 ## After filtering, kept 5749 out of a possible 5749 Sites
 ## Run Time = 0.00 seconds</code></pre>
 </div>
+<div id="analisis-de-estructura-poblacional" class="section level1">
+<h1><a href="#" class="btn btn-primary btn-lg"><strong>ANALISIS DE ESTRUCTURA POBLACIONAL</strong></a></h1>
+<div id="activar-paquetes-en-r" class="section level2">
+<h2>1.- ACTIVAR PAQUETES EN R :</h2>
+<pre class="r"><code>library(&quot;adegenet&quot;)</code></pre>
+<pre><code>## Loading required package: ade4</code></pre>
+<pre><code>## 
+##    /// adegenet 2.1.5 is loaded ////////////
+## 
+##    &gt; overview: &#39;?adegenet&#39;
+##    &gt; tutorials/doc/questions: &#39;adegenetWeb()&#39; 
+##    &gt; bug reports/feature requests: adegenetIssues()</code></pre>
+<pre class="r"><code>library(&quot;vcfR&quot;)</code></pre>
+<pre><code>## 
+##    *****       ***   vcfR   ***       *****
+##    This is vcfR 1.12.0 
+##      browseVignettes(&#39;vcfR&#39;) # Documentation
+##      citation(&#39;vcfR&#39;) # Citation
+##    *****       *****      *****       *****</code></pre>
+<pre class="r"><code>library(&quot;ggplot2&quot;)</code></pre>
+<pre class="r"><code>### cargar el archivo VCF filtrado####
+yuca_vcf&lt;-read.vcfR(&quot;yuca.chr14.maxmissing0.5.maf0.01.recode.vcf&quot;)</code></pre>
+<pre><code>## Scanning file to determine attributes.
+## File attributes:
+##   meta lines: 14
+##   header_line: 15
+##   variant count: 5749
+##   column count: 17
+## 
+Meta line 14 read in.
+## All meta lines processed.
+## gt matrix initialized.
+## Character matrix gt created.
+##   Character matrix gt rows: 5749
+##   Character matrix gt cols: 17
+##   skip: 0
+##   nrows: 5749
+##   row_num: 0
+## 
+Processed variant 1000
+Processed variant 2000
+Processed variant 3000
+Processed variant 4000
+Processed variant 5000
+Processed variant: 5749
+## All variants processed</code></pre>
+<pre class="r"><code>####convertir a formato genind ####
+gl_yuca&lt;-vcfR2genlight(yuca_vcf)
+###indicar ploidia####
+ploidy(gl_yuca)&lt;-2
+###cargar el mapa de poblacion ###
+mapa_pop&lt;-read.csv(&quot;mapa2.csv&quot;, sep = &quot;,&quot;, header = T)
+pop(gl_yuca)&lt;-mapa_pop$provincia
+####añadimos estratificación ####
+strata(gl_yuca)&lt;-data.frame(mapa_pop$provincia)
+nameStrata(gl_yuca)&lt;-~provincia
+table(strata(gl_yuca, ~provincia))</code></pre>
+<pre><code>## 
+##    huanuco       lima     tumbes   arequipa    ucayali      cusco      junin 
+##          1          1          1          1          1          1          1 
+## san-martin 
+##          1</code></pre>
+<pre class="r"><code>#### Análisis multivariado PCA####
+clust_yuca&lt;-tab(gl_yuca, freq=T, NA.method=&quot;mean&quot;)
+pca_yuca&lt;-dudi.pca(clust_yuca, scale = T, scannf = F)
+
+library(&quot;RColorBrewer&quot;)
+cols &lt;- brewer.pal(n = nPop(gl_yuca), name = &quot;Dark2&quot;)
+
+#### graficar PCA####
+library(&quot;factoextra&quot;)</code></pre>
+<pre><code>## Welcome! Want to learn more? See two factoextra-related books at https://goo.gl/ve3WBa</code></pre>
+<pre class="r"><code>fviz_pca_ind(pca_yuca, geom.ind = &quot;point&quot;, col.ind = gl_yuca$pop, palette = cols, addEllipses = FALSE, ellipse.type=&quot;confidence&quot;, legend.title = &quot;Provincias&quot;, pointshape=1, cpoint=1, xlab=&quot;PC1&quot;, ylab=&quot;PC2&quot;)</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<pre class="r"><code>fviz_pca_ind(pca_yuca, col.ind = &quot;cos2&quot;, gradient.cols = c(&quot;#00AFBB&quot;, &quot;#E7B800&quot;, &quot;#FC4E07&quot;),repel = FALSE, label=&quot;none&quot;, addEllipses = FALSE, ellipse.type=&quot;euclid&quot;, xlab=&quot;PC1&quot;, ylab=&quot;PC2&quot;, pointshape=19, cpoint=1)</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+</div>
+</div>
 
 
 

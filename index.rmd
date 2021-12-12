@@ -249,4 +249,43 @@ Este filtrado es importante y depende de los objetivos del estudio, el tipo y la
 vcftools --vcf /home/bvigil/GBS_SEMINARIO/stacks/yuca.chr14.maxmissing0.5.recode.vcf --maf 0.01 --recode --recode-INFO-all --out /home/bvigil/GBS_SEMINARIO/stacks/yuca.chr14.maxmissing0.5.maf0.01
 ```
 
+# <a href="#" class="btn btn-primary btn-lg">**ANALISIS DE ESTRUCTURA POBLACIONAL**</a>
+## 1.- ACTIVAR PAQUETES EN R :
+```{r}
+library("adegenet")
+library("vcfR")
+library("ggplot2")
+```
 
+```{r}
+### cargar el archivo VCF filtrado####
+yuca_vcf<-read.vcfR("yuca.chr14.maxmissing0.5.maf0.01.recode.vcf")
+```
+```{r}
+####convertir a formato genind ####
+gl_yuca<-vcfR2genlight(yuca_vcf)
+###indicar ploidia####
+ploidy(gl_yuca)<-2
+###cargar el mapa de poblacion ###
+mapa_pop<-read.csv("mapa2.csv", sep = ",", header = T)
+pop(gl_yuca)<-mapa_pop$provincia
+####añadimos estratificación ####
+strata(gl_yuca)<-data.frame(mapa_pop$provincia)
+nameStrata(gl_yuca)<-~provincia
+table(strata(gl_yuca, ~provincia))
+```
+```{r}
+#### Análisis multivariado PCA####
+clust_yuca<-tab(gl_yuca, freq=T, NA.method="mean")
+pca_yuca<-dudi.pca(clust_yuca, scale = T, scannf = F)
+
+library("RColorBrewer")
+cols <- brewer.pal(n = nPop(gl_yuca), name = "Dark2")
+
+#### graficar PCA####
+library("factoextra")
+fviz_pca_ind(pca_yuca, geom.ind = "point", col.ind = gl_yuca$pop, palette = cols, addEllipses = FALSE, ellipse.type="confidence", legend.title = "Provincias", pointshape=1, cpoint=1, xlab="PC1", ylab="PC2")
+```
+```{r}
+fviz_pca_ind(pca_yuca, col.ind = "cos2", gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),repel = FALSE, label="none", addEllipses = FALSE, ellipse.type="euclid", xlab="PC1", ylab="PC2", pointshape=19, cpoint=1)
+```
