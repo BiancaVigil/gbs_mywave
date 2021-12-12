@@ -5,14 +5,14 @@ date: "7/12/2021"
 output: html_document
 ---
 
-### **APLICACIONES**
+# <a href="#" class="btn btn-primary btn-lg">**APLICACIONES**</a>
 <div>
 <p style = 'text-align:center;'>
 <img src="Applications-of-Genotyping-by-Sequencing-integrating-broad-areas-of-genetics-and.png" width="600px">
 </p>
 </div>
 
-## **PIPELINE GBS-PROCESING**
+# <a href="#" class="btn btn-primary btn-lg">**PIPELINE GBS-PROCESING**</a>
 <div>
 <p style = 'text-align:center;'>
 <img src="pipeline_GBS.png" width="1000px">
@@ -20,7 +20,7 @@ output: html_document
 </div>
 
 
-### [**STACKS**](https://catchenlab.life.illinois.edu/stacks/)
+# <a href="#" class="btn btn-primary btn-lg">**STACKS**</a>
 
 [Descargar](https://catchenlab.life.illinois.edu/stacks/)
 
@@ -32,32 +32,32 @@ output: html_document
 </p>
 </div>
 
-## **DEMULTIPLEXACIÓN - FILTRADO - STACKS**
+# <a href="#" class="btn btn-primary btn-lg">**DEMULTIPLEXACIÓN - FILTRADO - STACKS**</a>
 
 [**process_radtags**](https://catchenlab.life.illinois.edu/stacks/manual-v1/)
 
-1.RawData
+## **1.RawData**
 <div>
 <p style = 'text-align:center;'>
 <img src="rawdata.png" width="600px">
 </p>
 </div>
-2.Barcodes para cada individuo
+## **2.Barcodes para cada individuo**
 <div>
 <p style = 'text-align:center;'>
 <img src="barcodes.png" width="200px">
 </p>
 </div>
-3.Demultiplexado o individualización
+## **3.Demultiplexado o individualización**
 <div>
 <p style = 'text-align:center;'>
 <img src="demultiplexado.png" width="400px">
 </p>
 </div>
 
-## **ALINEAMIENTO A GENOMA DE REFERENCIA**
+# <a href="#" class="btn btn-primary btn-lg">**ALINEAMIENTO A GENOMA DE REFERENCIA**</a>
 
-**1.INSTALACIÓN DE PROGRAMAS**
+## **1.INSTALACIÓN DE PROGRAMAS**
   
   BWA - BORROWS WHEELER ALIGNER
 ```{}
@@ -69,13 +69,13 @@ sudo apt-get install bwa
 sudo apt-get update
 sudo apt-get install samtools
 ```
-**2.INDEXADO DEL GENOMA DE REFERENCIA**
+## **2.INDEXADO DEL GENOMA DE REFERENCIA**
 ```{}
 #!/bin/bash
 src="/home/bvigil/GBS_SEMINARIO/genoma"
 bwa index -p manihot-index -a bwtsw $src/GCF_001659605.2_M.esculenta_v8_genomic.fna
 ```
-**3.ALINEAMIENTO**
+## **3.ALINEAMIENTO**
 ```{}
 #!/bin/bash
 src="/home/bvigil/GBS_SEMINARIO/"
@@ -96,7 +96,7 @@ do
 done
 
 ```
-**4.SAM --> BAM**
+## **4.SAM --> BAM**
 ```{}
 #!/bin/bash
 src="/home/bvigil/GBS_SEMINARIO/"
@@ -115,7 +115,7 @@ do
         samtools view -b -S $src/alineamiento/${ME}.sam -o $src/alineamiento/${ME}.bam
 done
 ```
-**5.SORT** 
+## **5.SORT** 
 ```{}
 #!/bin/bash
 src="/home/bvigil/GBS_SEMINARIO/alineamiento/"
@@ -135,7 +135,7 @@ do
 done
 ```
 
-### **GSTACKS - STACKS**
+# <a href="#" class="btn btn-primary btn-lg">**GSTACKS - STACKS**</a>
 
 ```{}
 #!/bin/bash
@@ -144,7 +144,7 @@ src="/home/bvigil/GBS_SEMINARIO"
 gstacks -I $src/alineamiento/sort/ -M $src/scripts/popmap-yuca-piloto -O $src/stacks -t 24
 ```
 
-### **POPULATIONS - VCF**
+# <a href="#" class="btn btn-primary btn-lg">**POPULATIONS - VCF**</a>
 **SNP-CALLING**
 ```{}
 #!/bin/bash
@@ -153,7 +153,8 @@ src="/home/bvigil/GBS_SEMINARIO"
 populations -P $src/stacks/ -M $src/scripts/popmap-yuca-piloto --vcf --plink -t 24
 ```
 
-### **FORMATO** [VCF](https://samtools.github.io/hts-specs/VCFv4.2.pdf)
+# <a href="#" class="btn btn-primary btn-lg">**FORMATO**</a>
+[VCF](https://samtools.github.io/hts-specs/VCFv4.2.pdf)
 
 VCF es un formato de archivo de texto (lo más probable es que se almacene de forma comprimida). Contiene líneas de metainformación, una línea de encabezado y luego líneas de datos, cada una de las cuales contiene información sobre una posición en el genoma. El formato también tiene la capacidad de contener información de genotipo en muestras para cada posición.
 
@@ -163,19 +164,19 @@ VCF es un formato de archivo de texto (lo más probable es que se almacene de fo
 </p>
 </div>
 
-### **PROGRAMAS -FILTRADO DE SNPs**
-**1.VCFTOOLS**
+# <a href="#" class="btn btn-primary btn-lg">**PROGRAMAS -FILTRADO DE SNPs**</a>
+## **1.VCFTOOLS**
 ```{}
 sudo apt-get update
 sudo apt-get install vcftools
 ```
-**2.BCFTOOLS**
+## **2.BCFTOOLS**
 ```{}
 sudo apt-get update
 sudo apt-get install bcftools
 ```
 
-## **DESCARGAR ARCHIVO - DEMO**
+# <a href="#" class="btn btn-primary btn-lg">**DESCARGAR ARCHIVO - DEMO**</a>
 
 Descargar [archivo VCF](https://drive.google.com/drive/folders/18xm4UcUeKhOCNCGLsWXVWW3jCQtKgwoV?usp=sharing)
 
@@ -185,7 +186,7 @@ Descargar [archivo VCF](https://drive.google.com/drive/folders/18xm4UcUeKhOCNCGL
 </p>
 </div>
 
-## **FILTRADO A NIVEL DE LOCI-VARIANTE-SNP**
+# <a href="#" class="btn btn-primary btn-lg">**FILTRADO A NIVEL DE LOCI-VARIANTE-SNP**</a>
 
 Solo se mantendran a variantes que se hayan genotipado con éxito en el 50% de los individuos de nuestra población.
 
@@ -193,7 +194,7 @@ Solo se mantendran a variantes que se hayan genotipado con éxito en el 50% de l
 vcftools --vcf /home/bvigil/GBS_SEMINARIO/stacks/yuca.chr14.recode.vcf --max-missing 0.5 --recode --recode-INFO-all --out /home/bvigil/GBS_SEMINARIO/stacks/yuca.chr14.maxmissing0.5 
 ```
 
-## **FILTRADO POR INDIVIDUOS**
+# <a href="#" class="btn btn-primary btn-lg">**FILTRADO POR INDIVIDUOS**</a>
 
 Este paso es para eliminar a los individuos que no se secuenciaron bien, que presentan datos faltantes por loci. Esto se realiza evaluando los niveles individuales de datos faltantes.
 
@@ -240,7 +241,7 @@ EOF
 </p>
 </div>
 
-## **FILTRADO POR FRECUENCIA DE ALELO MENOR - MAF**
+# <a href="#" class="btn btn-primary btn-lg">**FILTRADO POR FRECUENCIA DE ALELO MENOR - MAF**</a>
 
 Este filtrado es importante y depende de los objetivos del estudio, el tipo y la cantidad de individuos de la población. Por lo general se hace un filtrado de maf 0.01, esto significa que se eliminaran aquellos loci cuyo alelo menor tenga una frecuencia menor al 1%.
 
